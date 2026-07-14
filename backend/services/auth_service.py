@@ -269,10 +269,20 @@ def admin_login(username, password):
         and password == Config.ADMIN_PASSWORD
     ):
 
+        token = generate_token({
+            "username": username,
+            "is_admin": True
+        })
+
+        logger.info("Admin Logged In Successfully")
+
         return {
             "success": True,
-            "message": "Admin Login Successful"
+            "message": "Admin Login Successful",
+            "token": token
         }
+
+    logger.warning("Invalid Admin Login Attempt")
 
     return {
         "success": False,
