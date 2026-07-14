@@ -13,12 +13,14 @@ def login_required(function):
         auth_header = request.headers.get("Authorization")
 
         if not auth_header:
+
             return jsonify({
                 "success": False,
                 "message": "Authorization header missing."
             }), 401
 
         if not auth_header.startswith("Bearer "):
+
             return jsonify({
                 "success": False,
                 "message": "Invalid Authorization header."
@@ -29,18 +31,13 @@ def login_required(function):
         payload = verify_token(token)
 
         if not payload:
+
             return jsonify({
                 "success": False,
                 "message": "Invalid or expired token."
             }), 401
 
-        if payload.get("is_admin"):
-            g.current_user = {
-                "username": payload["username"],
-                "is_admin": True
-            }
-        else:
-            g.current_user = payload
+        g.current_user = payload
 
         return function(*args, **kwargs)
 
